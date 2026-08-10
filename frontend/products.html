@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Warranty Care - My Products</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f7fb;
+            color: #222;
+        }
+
+        /* HEADER */
+
+        .header {
+            background: white;
+            padding: 30px 5%;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .logo {
+            color: #28658f;
+            font-size: 40px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            color: #555;
+            font-size: 20px;
+            margin-top: 8px;
+        }
+
+        /* CONTAINER */
+
+        .container {
+            width: 85%;
+            margin: 45px auto;
+        }
+
+        /* TOP */
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #28658f;
+            font-size: 36px;
+        }
+
+        /* BACK BUTTON */
+
+        .back-btn {
+            background: #286b98;
+            color: white;
+            border: none;
+            padding: 13px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .back-btn:hover {
+            background: #1f557a;
+        }
+
+        /* PRODUCTS GRID */
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        /* PRODUCT CARD */
+
+        .product-card {
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .product-card h2 {
+            color: #28658f;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .product-card p {
+            margin: 12px 0;
+            color: #555;
+            font-size: 17px;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #222;
+        }
+
+        /* BUTTONS */
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            flex: 1;
+            border: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .edit-btn {
+            background: #286b98;
+        }
+
+        .edit-btn:hover {
+            background: #1f557a;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
+        /* MESSAGE */
+
+        #message {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 18px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1000px) {
+
+            .products {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 650px) {
+
+            .container {
+                width: 90%;
+            }
+
+            .top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .products {
+                grid-template-columns: 1fr;
+            }
+
+            .logo {
+                font-size: 30px;
+            }
+
+            h1 {
+                font-size: 30px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <div class="logo">
+            WARRANTY CARE
+        </div>
+
+        <div class="subtitle">
+            Warranty Management System
+        </div>
+
+    </header>
+
+
+    <!-- MAIN -->
+
+    <main class="container">
+
+        <div class="top">
+
+            <h1>
+                My Products
+            </h1>
+
+            <button
+                class="back-btn"
+                onclick="goDashboard()">
+                BACK TO DASHBOARD
+            </button>
+
+        </div>
+
+
+        <!-- PRODUCTS -->
+
+        <div
+            id="products"
+            class="products">
+        </div>
+
+
+        <!-- MESSAGE -->
+
+        <div id="message"></div>
+
+    </main>
+
+
+    <script>
+
+        /* GET LOGGED-IN USER */
+
+        const userId =
+            localStorage.getItem("user_id");
+
+
+        /* ELEMENTS */
+
+        const productsContainer =
+            document.getElementById("products");
+
+        const message =
+            document.getElementById("message");
+
+
+        /* GO TO DASHBOARD */
+
+        function goDashboard() {
+
+            window.location.href =
+                "dashboard.html";
+
+        }
+
+
+        /* LOAD PRODUCTS */
+
+        async function loadProducts() {
+
+            /* CHECK LOGIN */
+
+            if (!userId) {
+
+                message.textContent =
+                    "User not found. Please login again.";
+
+                message.style.color = "red";
+
+                return;
+            }
+
+
+            try {
+
+                /* API REQUEST */
+
+                const response =
+                    await fetch(
+                        "http://127.0.0.1:8000/products/user/"
+                        + userId
+                    );
+
+
+                /* RESPONSE DATA */
+
+                const data =
+                    await response.json();
+
+
+                /* ERROR */
+
+                if (!response.ok) {
+
+                    message.textContent =
+                        data.detail ||
+                        "Unable to load products.";
+
+                    message.style.color =
+                        "red";
+
+                    return;
+                }
+
+
+                /* CLEAR OLD PRODUCTS */
+
+                productsContainer.innerHTML = "";
+
+
+                /* NO PRODUCTS */
+
+                if (!data || data.length === 0) {
+
+                    message.textContent =
+                        "No products registered yet.";
+
+                    message.style.color =
+                        "#555";
+
+                    return;
+                }
+
+
+                /* CLEAR MESSAGE */
+
+                message.textContent = "";
+
+
+                /* DISPLAY PRODUCTS */
+
+                data.forEach(function(product) {
+
+                    const card =
+                        document.createElement("div");
+
+                    card.className =
+                        "product-card";
+
+
+                    card.innerHTML = `
+
+                        <h2>
+                            📦 ${product.name || "Product"}
+                        </h2>
+
+
+                        <p>
+                            <span class="label">
+                                Product ID:
+                            </span>
+                            ${product.id ?? "-"}
+                        </p>
+
+
+                        <p>
+                            <span class="label">
+                                Brand:
+                            </span>
+                            ${product.brand ?? "-"}
+                        </p>
+
+
+                        <p>
+                            <span class="label">
+                                Serial Number:
+                            </span>
+                            ${product.serial_number ?? "-"}
+                        </p>
+
+
+                        <p>
+                            <span class="label">
+                                Purchase Date:
+                            </span>
+                            ${product.purchase_date ?? "-"}
+                        </p>
+
+
+                        <p>
+                            <span class="label">
+                                Warranty Expiry:
+                            </span>
+                            ${product.warranty_expiry ?? "-"}
+                        </p>
+
+
+                        <div class="action-buttons">
+
+                            <button
+                                class="edit-btn"
+                                onclick="editProduct(${product.id})">
+                                EDIT
+                            </button>
+
+
+                            <button
+                                class="delete-btn"
+                                onclick="deleteProduct(${product.id})">
+                                DELETE
+                            </button>
+
+                        </div>
+
+                    `;
+
+
+                    productsContainer.appendChild(card);
+
+                });
+
+            }
+
+
+            catch (error) {
+
+                console.error(error);
+
+                message.textContent =
+                    "Unable to connect to the server.";
+
+                message.style.color =
+                    "red";
+
+            }
+
+        }
+
+
+
+        /* EDIT PRODUCT */
+
+        async function editProduct(productId) {
+
+            /* PRODUCT NAME */
+
+            const name =
+                prompt("Enter product name:");
+
+            if (name === null) {
+                return;
+            }
+
+
+            /* BRAND */
+
+            const brand =
+                prompt("Enter brand:");
+
+            if (brand === null) {
+                return;
+            }
+
+
+            /* SERIAL NUMBER */
+
+            const serialNumber =
+                prompt("Enter serial number:");
+
+            if (serialNumber === null) {
+                return;
+            }
+
+
+            /* PURCHASE DATE */
+
+            const purchaseDate =
+                prompt(
+                    "Enter purchase date (YYYY-MM-DD):"
+                );
+
+            if (purchaseDate === null) {
+                return;
+            }
+
+
+            /* WARRANTY EXPIRY */
+
+            const warrantyExpiry =
+                prompt(
+                    "Enter warranty expiry (YYYY-MM-DD):"
+                );
+
+            if (warrantyExpiry === null) {
+                return;
+            }
+
+
+            try {
+
+                /* UPDATE API */
+
+                const response =
+                    await fetch(
+                        "http://127.0.0.1:8000/products/"
+                        + productId,
+                        {
+                            method: "PUT",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+
+                                name: name,
+
+                                brand: brand,
+
+                                serial_number:
+                                    serialNumber,
+
+                                purchase_date:
+                                    purchaseDate,
+
+                                warranty_expiry:
+                                    warrantyExpiry,
+
+                                user_id:
+                                    parseInt(userId)
+
+                            })
+                        }
+                    );
+
+
+                /* RESPONSE */
+
+                const data =
+                    await response.json();
+
+
+                /* ERROR */
+
+                if (!response.ok) {
+
+                    alert(
+                        data.detail ||
+                        "Unable to update product."
+                    );
+
+                    return;
+                }
+
+
+                /* SUCCESS */
+
+                alert(
+                    "Product updated successfully!"
+                );
+
+
+                /* RELOAD */
+
+                loadProducts();
+
+            }
+
+
+            catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Unable to connect to server."
+                );
+
+            }
+
+        }
+
+
+
+        /* DELETE PRODUCT */
+
+        async function deleteProduct(productId) {
+
+            /* CONFIRM */
+
+            const confirmDelete =
+                confirm(
+                    "Are you sure you want to delete this product?"
+                );
+
+
+            if (!confirmDelete) {
+
+                return;
+
+            }
+
+
+            try {
+
+                /* DELETE API */
+
+                const response =
+                    await fetch(
+                        "http://127.0.0.1:8000/products/"
+                        + productId,
+                        {
+                            method: "DELETE"
+                        }
+                    );
+
+
+                /* RESPONSE */
+
+                const data =
+                    await response.json();
+
+
+                /* ERROR */
+
+                if (!response.ok) {
+
+                    alert(
+                        data.detail ||
+                        "Unable to delete product."
+                    );
+
+                    return;
+                }
+
+
+                /* SUCCESS */
+
+                alert(
+                    "Product deleted successfully!"
+                );
+
+
+                /* RELOAD */
+
+                loadProducts();
+
+            }
+
+
+            catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Unable to connect to server."
+                );
+
+            }
+
+        }
+
+
+        /* LOAD WHEN PAGE OPENS */
+
+        loadProducts();
+
+    </script>
+
+</body>
+
+</html>

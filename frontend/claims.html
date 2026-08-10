@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Warranty Care - Claims</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f7fb;
+            color: #222;
+        }
+
+
+        /* HEADER */
+
+        .header {
+            background: white;
+            padding: 30px 5%;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .logo {
+            color: #28658f;
+            font-size: 40px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            color: #555;
+            font-size: 20px;
+            margin-top: 8px;
+        }
+
+
+        /* CONTAINER */
+
+        .container {
+            width: 85%;
+            max-width: 1200px;
+            margin: 45px auto;
+        }
+
+
+        /* TOP */
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #28658f;
+            font-size: 36px;
+        }
+
+
+        /* BACK BUTTON */
+
+        .back-btn {
+            background: #286b98;
+            color: white;
+            border: none;
+            padding: 13px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .back-btn:hover {
+            background: #1f557a;
+        }
+
+
+        /* ADD CLAIM BOX */
+
+        .form-card {
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow:
+                0 8px 25px rgba(0, 0, 0, 0.08);
+
+            margin-bottom: 35px;
+        }
+
+        .form-card h2 {
+            color: #28658f;
+            margin-bottom: 25px;
+        }
+
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 13px;
+
+            border: 1px solid #ccc;
+            border-radius: 8px;
+
+            font-size: 16px;
+        }
+
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+
+            background: #286b98;
+            color: white;
+
+            border: none;
+            border-radius: 8px;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+
+        .submit-btn:hover {
+            background: #1f557a;
+        }
+
+
+        /* CLAIM GRID */
+
+        .claims {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+
+        /* CLAIM CARD */
+
+        .claim-card {
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+
+        .claim-card h2 {
+            color: #28658f;
+            margin-bottom: 20px;
+            font-size: 27px;
+        }
+
+
+        .claim-card p {
+            margin: 12px 0;
+            color: #555;
+            font-size: 17px;
+        }
+
+
+        .label {
+            font-weight: bold;
+            color: #222;
+        }
+
+
+        /* STATUS */
+
+        .status {
+            display: inline-block;
+
+            padding: 7px 14px;
+
+            border-radius: 20px;
+
+            font-weight: bold;
+
+            background: #eee;
+
+            color: #333;
+        }
+
+
+        /* BUTTONS */
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+
+        .edit-btn,
+        .delete-btn {
+            flex: 1;
+
+            border: none;
+
+            padding: 12px 15px;
+
+            border-radius: 8px;
+
+            color: white;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            font-size: 15px;
+        }
+
+
+        .edit-btn {
+            background: #286b98;
+        }
+
+
+        .edit-btn:hover {
+            background: #1f557a;
+        }
+
+
+        .delete-btn {
+            background: #e74c3c;
+        }
+
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
+
+        /* MESSAGE */
+
+        #message {
+            text-align: center;
+
+            margin-top: 30px;
+
+            font-size: 18px;
+        }
+
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1000px) {
+
+            .claims {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            .container {
+                width: 90%;
+            }
+
+            .top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .claims {
+                grid-template-columns: 1fr;
+            }
+
+            .logo {
+                font-size: 30px;
+            }
+
+            h1 {
+                font-size: 30px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <div class="logo">
+            WARRANTY CARE
+        </div>
+
+        <div class="subtitle">
+            Warranty Management System
+        </div>
+
+    </header>
+
+
+
+    <!-- MAIN -->
+
+    <main class="container">
+
+
+        <!-- TOP -->
+
+        <div class="top">
+
+            <h1>
+                Warranty Claims
+            </h1>
+
+
+            <button
+                class="back-btn"
+                onclick="goDashboard()">
+
+                BACK TO DASHBOARD
+
+            </button>
+
+        </div>
+
+
+
+        <!-- ADD CLAIM -->
+
+        <div class="form-card">
+
+            <h2>
+                Submit Warranty Claim
+            </h2>
+
+
+            <div class="form-group">
+
+                <label for="productId">
+                    Product ID
+                </label>
+
+                <input
+                    type="number"
+                    id="productId"
+                    placeholder="Enter Product ID"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="issue">
+                    Issue
+                </label>
+
+                <textarea
+                    id="issue"
+                    placeholder="Describe the issue"
+                    required>
+                </textarea>
+
+            </div>
+
+
+            <button
+                class="submit-btn"
+                onclick="createClaim()">
+
+                SUBMIT CLAIM
+
+            </button>
+
+        </div>
+
+
+
+        <!-- CLAIMS -->
+
+        <div
+            id="claims"
+            class="claims">
+        </div>
+
+
+        <!-- MESSAGE -->
+
+        <div id="message"></div>
+
+
+    </main>
+
+
+
+    <script>
+
+
+        /* API */
+
+        const API_URL =
+            "http://127.0.0.1:8000";
+
+
+        /* USER */
+
+        const userId =
+            localStorage.getItem("user_id");
+
+
+        /* ELEMENTS */
+
+        const claimsContainer =
+            document.getElementById("claims");
+
+        const message =
+            document.getElementById("message");
+
+
+
+        /* DASHBOARD */
+
+        function goDashboard() {
+
+            window.location.href =
+                "dashboard.html";
+
+        }
+
+
+
+        /* CREATE CLAIM */
+
+        async function createClaim() {
+
+
+            const productId =
+                document.getElementById("productId")
+                    .value;
+
+
+            const issue =
+                document.getElementById("issue")
+                    .value.trim();
+
+
+            if (!userId) {
+
+                alert(
+                    "User not found. Please login again."
+                );
+
+                return;
+            }
+
+
+            if (!productId || !issue) {
+
+                alert(
+                    "Please enter Product ID and Issue."
+                );
+
+                return;
+            }
+
+
+            try {
+
+
+                const response =
+                    await fetch(
+                        API_URL + "/claims/",
+                        {
+
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+
+                                product_id:
+                                    parseInt(productId),
+
+                                user_id:
+                                    parseInt(userId),
+
+                                issue:
+                                    issue
+
+                            })
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    alert(
+                        data.detail ||
+                        "Unable to create claim."
+                    );
+
+                    return;
+                }
+
+
+                alert(
+                    "Warranty claim submitted successfully!"
+                );
+
+
+                document.getElementById("productId")
+                    .value = "";
+
+
+                document.getElementById("issue")
+                    .value = "";
+
+
+                loadClaims();
+
+            }
+
+
+            catch (error) {
+
+                alert(
+                    "Unable to connect to server."
+                );
+
+            }
+
+        }
+
+
+
+        /* LOAD CLAIMS */
+
+        async function loadClaims() {
+
+
+            if (!userId) {
+
+                message.textContent =
+                    "User not found. Please login again.";
+
+                message.style.color =
+                    "red";
+
+                return;
+            }
+
+
+            try {
+
+
+                const response =
+                    await fetch(
+                        API_URL +
+                        "/claims/user/" +
+                        userId
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    message.textContent =
+                        data.detail ||
+                        "Unable to load claims.";
+
+                    message.style.color =
+                        "red";
+
+                    return;
+                }
+
+
+                claimsContainer.innerHTML =
+                    "";
+
+
+                if (!data || data.length === 0) {
+
+                    message.textContent =
+                        "No warranty claims found.";
+
+                    message.style.color =
+                        "#555";
+
+                    return;
+                }
+
+
+                message.textContent =
+                    "";
+
+
+                data.forEach(function(claim) {
+
+
+                    const card =
+                        document.createElement("div");
+
+
+                    card.className =
+                        "claim-card";
+
+
+                    card.innerHTML = `
+
+                        <h2>
+                            🛠️ Claim #${claim.id}
+                        </h2>
+
+
+                        <p>
+                            <span class="label">
+                                Product ID:
+                            </span>
+
+                            ${claim.product_id}
+                        </p>
+
+
+                        <p>
+                            <span class="label">
+                                User ID:
+                            </span>
+
+                            ${claim.user_id}
+                        </p>
+
+
+                        <p>
+                            <span class="label">
+                                Issue:
+                            </span>
+
+                            ${claim.issue}
+                        </p>
+
+
+                        <p>
+                            <span class="label">
+                                Status:
+                            </span>
+
+                            <span class="status">
+                                ${claim.status}
+                            </span>
+                        </p>
+
+
+                        <p>
+                            <span class="label">
+                                Created:
+                            </span>
+
+                            ${claim.created_at || "-"}
+                        </p>
+
+
+                        <div class="action-buttons">
+
+
+                            <button
+                                class="edit-btn"
+                                onclick="updateClaim(${claim.id})">
+
+                                UPDATE
+
+                            </button>
+
+
+                            <button
+                                class="delete-btn"
+                                onclick="deleteClaim(${claim.id})">
+
+                                DELETE
+
+                            </button>
+
+
+                        </div>
+
+                    `;
+
+
+                    claimsContainer
+                        .appendChild(card);
+
+                });
+
+            }
+
+
+            catch (error) {
+
+                message.textContent =
+                    "Unable to connect to server.";
+
+                message.style.color =
+                    "red";
+
+            }
+
+        }
+
+
+
+        /* UPDATE CLAIM */
+
+        async function updateClaim(claimId) {
+
+
+            const status =
+                prompt(
+                    "Enter new status:",
+                    "Approved"
+                );
+
+
+            if (status === null) {
+
+                return;
+
+            }
+
+
+            if (!status.trim()) {
+
+                alert(
+                    "Status cannot be empty."
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+
+                const response =
+                    await fetch(
+                        API_URL +
+                        "/claims/" +
+                        claimId +
+                        "?status=" +
+                        encodeURIComponent(
+                            status.trim()
+                        ),
+                        {
+
+                            method: "PUT"
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    alert(
+                        data.detail ||
+                        "Unable to update claim."
+                    );
+
+                    return;
+
+                }
+
+
+                alert(
+                    "Claim updated successfully!"
+                );
+
+
+                loadClaims();
+
+            }
+
+
+            catch (error) {
+
+                alert(
+                    "Unable to connect to server."
+                );
+
+            }
+
+        }
+
+
+
+        /* DELETE CLAIM */
+
+        async function deleteClaim(claimId) {
+
+
+            const confirmDelete =
+                confirm(
+                    "Are you sure you want to delete this claim?"
+                );
+
+
+            if (!confirmDelete) {
+
+                return;
+
+            }
+
+
+            try {
+
+
+                const response =
+                    await fetch(
+                        API_URL +
+                        "/claims/" +
+                        claimId,
+                        {
+
+                            method: "DELETE"
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    alert(
+                        data.detail ||
+                        "Unable to delete claim."
+                    );
+
+                    return;
+
+                }
+
+
+                alert(
+                    "Claim deleted successfully!"
+                );
+
+
+                loadClaims();
+
+            }
+
+
+            catch (error) {
+
+                alert(
+                    "Unable to connect to server."
+                );
+
+            }
+
+        }
+
+
+
+        /* LOAD */
+
+        loadClaims();
+
+    </script>
+
+
+</body>
+
+</html>

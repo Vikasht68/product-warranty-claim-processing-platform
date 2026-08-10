@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Warranty Care - Add Product</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f6fa;
+            color: #222;
+        }
+
+        header {
+            background: white;
+            padding: 35px 5%;
+            border-bottom: 1px solid #ddd;
+        }
+
+        header h1 {
+            color: #28658f;
+            font-size: 42px;
+            letter-spacing: 2px;
+        }
+
+        header p {
+            margin-top: 8px;
+            font-size: 20px;
+            color: #555;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 50px auto;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .top h2 {
+            color: #28658f;
+            font-size: 32px;
+        }
+
+        .back-btn {
+            background: #286f9e;
+            color: white;
+            text-decoration: none;
+            padding: 14px 22px;
+            border-radius: 7px;
+            font-weight: bold;
+        }
+
+        .form-card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            font-size: 17px;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #286f9e;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            background: #286f9e;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background: #1f587e;
+        }
+
+        #message {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>WARRANTY CARE</h1>
+        <p>Warranty Management System</p>
+    </header>
+
+    <div class="container">
+
+        <div class="top">
+            <h2>Add Product</h2>
+
+            <a href="dashboard.html" class="back-btn">
+                BACK TO DASHBOARD
+            </a>
+        </div>
+
+        <div class="form-card">
+
+            <form id="productForm">
+
+                <div class="form-group">
+                    <label for="name">Product Name</label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        placeholder="Enter product name"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="brand">Brand</label>
+
+                    <input
+                        type="text"
+                        id="brand"
+                        placeholder="Enter brand"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="serial_number">Serial Number</label>
+
+                    <input
+                        type="text"
+                        id="serial_number"
+                        placeholder="Enter serial number"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="purchase_date">Purchase Date</label>
+
+                    <input
+                        type="date"
+                        id="purchase_date"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="warranty_expiry">Warranty Expiry Date</label>
+
+                    <input
+                        type="date"
+                        id="warranty_expiry"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    ADD PRODUCT
+                </button>
+
+            </form>
+
+            <div id="message"></div>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        const API_URL = "http://127.0.0.1:8000";
+
+        const form = document.getElementById("productForm");
+        const message = document.getElementById("message");
+
+        form.addEventListener("submit", async function(event) {
+
+            event.preventDefault();
+
+            message.textContent = "";
+            message.className = "";
+
+            /*
+             * Get logged-in user information.
+             * Your login page should store the user object in localStorage.
+             */
+
+            let user = null;
+
+            try {
+
+                user = JSON.parse(localStorage.getItem("user"));
+
+            } catch (error) {
+
+                user = null;
+
+            }
+
+            /*
+             * If user object is not available,
+             * try user_id directly.
+             */
+
+            let userId = null;
+
+            if (user && user.id) {
+
+                userId = user.id;
+
+            } else {
+
+                userId = localStorage.getItem("user_id");
+
+            }
+
+            if (!userId) {
+
+                message.textContent =
+                    "User not found. Please login again.";
+
+                message.className = "error";
+
+                return;
+            }
+
+            const productData = {
+
+                name: document.getElementById("name").value,
+
+                brand: document.getElementById("brand").value,
+
+                serial_number:
+                    document.getElementById("serial_number").value,
+
+                purchase_date:
+                    document.getElementById("purchase_date").value,
+
+                warranty_expiry:
+                    document.getElementById("warranty_expiry").value,
+
+                user_id: parseInt(userId)
+
+            };
+
+            try {
+
+                const response = await fetch(
+                    API_URL + "/products/",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json"
+                        },
+
+                        body: JSON.stringify(productData)
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+
+                    message.textContent =
+                        data.detail || "Unable to add product.";
+
+                    message.className = "error";
+
+                    return;
+                }
+
+                message.textContent =
+                    "Product added successfully!";
+
+                message.className = "success";
+
+                form.reset();
+
+                /*
+                 * After 1 second go to My Products page
+                 */
+
+                setTimeout(function() {
+
+                    window.location.href = "products.html";
+
+                }, 1000);
+
+            } catch (error) {
+
+                console.error(error);
+
+                message.textContent =
+                    "Unable to connect to server.";
+
+                message.className = "error";
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>
