@@ -2,17 +2,22 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Warranty Care - Dashboard</title>
 
+
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
+
 
         body {
             font-family: Arial, sans-serif;
@@ -20,76 +25,121 @@
             color: #222;
         }
 
+
         /* HEADER */
 
         header {
+
             background: white;
+
             padding: 35px 4%;
+
             border-bottom: 1px solid #ddd;
 
             display: flex;
+
             justify-content: space-between;
+
             align-items: center;
         }
 
+
         .logo h1 {
+
             color: #28658f;
+
             font-size: 42px;
+
             letter-spacing: 2px;
         }
 
+
         .logo p {
+
             margin-top: 8px;
+
             color: #555;
+
             font-size: 20px;
         }
 
+
         .logout-btn {
+
             background: #e55353;
+
             color: white;
+
             border: none;
+
             padding: 15px 30px;
+
             border-radius: 8px;
+
             font-size: 16px;
+
             font-weight: bold;
+
             cursor: pointer;
         }
 
+
         .logout-btn:hover {
+
             background: #c93f3f;
         }
+
 
         /* MAIN */
 
         .container {
+
             width: 90%;
+
             max-width: 1200px;
+
             margin: 50px auto;
         }
 
+
         .welcome h2 {
+
             color: #28658f;
+
             font-size: 32px;
+
             margin-bottom: 8px;
         }
 
+
         .welcome p {
+
             font-size: 20px;
+
             color: #444;
         }
+
 
         /* CARDS */
 
         .cards {
+
             display: grid;
+
             grid-template-columns: repeat(3, 1fr);
+
             gap: 25px;
+
             margin-top: 40px;
         }
 
+
         .card {
+
             background: white;
+
             padding: 35px;
+
             border-radius: 18px;
 
             box-shadow:
@@ -98,46 +148,65 @@
             min-height: 260px;
 
             display: flex;
+
             flex-direction: column;
         }
 
+
         .card h3 {
+
             color: #28658f;
+
             font-size: 27px;
+
             margin-bottom: 20px;
         }
 
+
         .card p {
+
             font-size: 18px;
+
             line-height: 1.6;
+
             color: #444;
 
             flex: 1;
         }
 
+
         .card button {
+
             width: 100%;
+
             padding: 15px;
 
             background: #286f9e;
+
             color: white;
 
             border: none;
+
             border-radius: 8px;
 
             font-size: 17px;
+
             font-weight: bold;
 
             cursor: pointer;
         }
 
+
         .card button:hover {
+
             background: #1f587e;
         }
 
-        /* CLAIMS SECTION */
+
+        /* DASHBOARD INFORMATION */
 
         .dashboard-section {
+
             background: white;
 
             margin-top: 45px;
@@ -150,39 +219,50 @@
                 0 8px 25px rgba(0, 0, 0, 0.08);
         }
 
+
         .dashboard-section h2 {
+
             color: #28658f;
+
             font-size: 32px;
+
             margin-bottom: 20px;
         }
 
+
         .dashboard-section p {
+
             font-size: 18px;
         }
 
-        #claimMessage {
-            margin-top: 20px;
-            color: #555;
-        }
 
         /* MOBILE */
 
         @media (max-width: 900px) {
 
             .cards {
+
                 grid-template-columns: 1fr;
             }
 
+
             header {
+
                 flex-direction: column;
+
                 align-items: flex-start;
+
                 gap: 20px;
             }
 
+
             .logout-btn {
+
                 align-self: flex-end;
             }
+
         }
+
     </style>
 
 </head>
@@ -319,16 +399,14 @@
 
         <div class="dashboard-section">
 
-            <h2 id="sectionTitle">
+            <h2>
                 Warranty Dashboard
             </h2>
 
-            <p id="sectionMessage">
+            <p>
                 Select an option above to manage
-                your warranty.
+                your products and warranty claims.
             </p>
-
-            <p id="claimMessage"></p>
 
         </div>
 
@@ -343,7 +421,7 @@
 
 
         /*
-         * Load logged-in user
+         * LOAD LOGGED-IN USER
          */
 
         function loadUser() {
@@ -357,7 +435,9 @@
                     localStorage.getItem("user")
                 );
 
-            } catch (error) {
+            }
+
+            catch (error) {
 
                 user = null;
 
@@ -380,6 +460,7 @@
                 const savedName =
                     localStorage.getItem("user_name");
 
+
                 if (savedName) {
 
                     document.getElementById("userName")
@@ -394,7 +475,7 @@
 
 
         /*
-         * Go to Products
+         * GO TO PRODUCTS
          */
 
         function goToProducts() {
@@ -407,7 +488,7 @@
 
 
         /*
-         * Go to Add Product
+         * GO TO ADD PRODUCT
          */
 
         function goToAddProduct() {
@@ -420,24 +501,20 @@
 
 
         /*
-         * Warranty Claims
+         * GO TO WARRANTY CLAIMS
          */
 
         function showClaims() {
 
-            document.getElementById("sectionTitle")
-                .textContent = "Warranty Claims";
-
-            document.getElementById("sectionMessage")
-                .textContent =
-                "Warranty claims module will be available soon.";
+            window.location.href =
+                "claims.html";
 
         }
 
 
 
         /*
-         * Logout
+         * LOGOUT
          */
 
         function logout() {
@@ -448,6 +525,7 @@
 
             localStorage.removeItem("user_name");
 
+
             window.location.href =
                 "login.html";
 
@@ -456,7 +534,7 @@
 
 
         /*
-         * Run when page loads
+         * RUN WHEN PAGE LOADS
          */
 
         loadUser();
